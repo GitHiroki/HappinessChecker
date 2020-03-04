@@ -160,7 +160,7 @@ public class LineBotDemoSpringBootAppApplication extends SpringBootServletInitia
 		try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
 			BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
 			List<AnnotateImageResponse> responses = response.getResponsesList();
-			StringBuilder sb = new StringBuilder("Text:");
+			StringBuilder sb = new StringBuilder();
 			
 			for (AnnotateImageResponse res : responses) {
 				if (res.hasError()) {
@@ -173,6 +173,9 @@ public class LineBotDemoSpringBootAppApplication extends SpringBootServletInitia
 //					sb.append(String.format("%s\n", annotation.getDescription()));
 //				}
 				for (FaceAnnotation annotation : res.getFaceAnnotationsList()) {
+					// 以下それぞれの文字列で点数(係数)を決める
+					// 係数から数値をかけて点数を出すようにする
+					// この際100点はなくてよい。80-95点の幅で調整しよう.
 					out.printf("AngerLikelihood: %s\n", annotation.getAngerLikelihood());
 					out.printf("JoyLikelihood: %s\n", annotation.getJoyLikelihood());
 					out.printf("SurpriseLikelihood: %s\n", annotation.getSurpriseLikelihood());
